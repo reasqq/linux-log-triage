@@ -67,6 +67,15 @@ class TriageTests(unittest.TestCase):
         result = analyze([self.write(ssh("2026-01-01 03:00:00.123", FAILED))], tz=parse_offset("+03:00"))
         self.assertEqual(result["events"][0]["timestamp"], "2026-01-01T00:00:00.123000+00:00")
 
+    def test_fractional_precision_and_invalid_offset(self):
+        for fraction in ("1", "12", "1234", "123456789"):
+            with self.subTest(fraction=fraction):
+                result = analyze([self.write(ssh(f"2026-01-01T03:00:00.{fraction}+0300", FAILED))])
+                expected = fraction[:6].ljust(6, "0")
+                self.assertEqual(result["events"][0]["timestamp"], f"2026-01-01T00:00:00.{expected}+00:00")
+        result = analyze([self.write(ssh("2026-01-01T00:00:00+03:60", FAILED))])
+        self.assertIsNone(result["events"][0]["timestamp"])
+
     def test_legacy_year_rollover(self):
         content = ssh("Dec 31 23:59:59", FAILED) + ssh("Jan  1 00:00:00", FAILED)
         result = analyze([self.write(content)], year=2025, threshold=2)

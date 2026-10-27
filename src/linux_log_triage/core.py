@@ -44,7 +44,15 @@ def timestamp(line, year, tz):
     match = ISO.match(line)
     try:
         if match:
-            dt = datetime.fromisoformat(match[1].replace("Z", "+00:00"))
+            value = match[1].replace("Z", "+00:00")
+            # Python 3.10 needs colonized offsets and 3/6 fractional digits.
+            offset = re.search(r"([+-])(\d{2}):?(\d{2})$", value)
+            if offset:
+                normalized = f"{offset[1]}{offset[2]}:{offset[3]}"
+                parse_offset(normalized)
+                value = value[:offset.start()] + normalized
+            value = re.sub(r"\.(\d+)", lambda m: "." + m[1][:6].ljust(6, "0"), value)
+            dt = datetime.fromisoformat(value)
             return dt.replace(tzinfo=tz) if dt.tzinfo is None else dt
         match = SYSLOG.match(line)
         if match and year is not None:
