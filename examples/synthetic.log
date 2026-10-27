@@ -1,0 +1,7 @@
+2026-10-27T10:00:00+03:00 training sshd[42]: Failed password for invalid user demo from 192.0.2.10 port 49101 ssh2
+2026-10-27T10:01:00+03:00 training sshd[43]: Failed password for invalid user demo from 192.0.2.10 port 49102 ssh2
+2026-10-27T10:02:00+03:00 training sshd[44]: Failed password for invalid user demo from 192.0.2.10 port 49103 ssh2
+2026-10-27T10:03:00+03:00 training sshd[45]: Accepted publickey for demo from 192.0.2.10 port 49104 ssh2
+2026-10-27T10:04:00+03:00 training sudo[46]: demo : TTY=pts/0 ; PWD=/tmp ; USER=root ; COMMAND=/usr/bin/id
+2026-10-27T10:04:01+03:00 training sudo[46]: pam_unix(sudo:session): session opened for user root(uid=0) by demo(uid=1000)
+2026-10-27T10:04:02+03:00 training sudo[46]: pam_unix(sudo:session): session closed for user root
